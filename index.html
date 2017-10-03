@@ -43,6 +43,35 @@
         .cubby-pad {
             padding: 1%;
         }
+
+        .cubby-warn {
+            background: rgb(255, 82, 82);
+            padding: 0px;
+            width: 100%;
+            height: 80px;
+            text-align: center;
+        }
+
+        .cubby-warn>i {
+            line-height: -35px;
+            font-size: 62px;
+            color: white;
+            margin-top: 15px;
+        }
+
+        .dialog-button {
+            width: 300px;
+            align-self: auto;
+        }
+
+        .mdl-dialog__actions>*:first-child {
+            margin-right: 1em;
+        }
+
+        #warning-title {
+            color: rgb(255, 82, 82);
+            text-align: center;
+        }
     </style>
 
 
@@ -83,25 +112,25 @@
                                 <label class="mdl-textfield__label" for="upc-sku">UPC/SKU</label>
                             </div>
                             <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                <input class="mdl-textfield__input" type="text" id="cubby" onkeypress="return cubbyAssign(event)">
+                                <input class="mdl-textfield__input" type="text" id="cubby" pattern="[Dd][0-9]{3,}" onkeypress="return cubbyAssign(event)">
                                 <label class="mdl-textfield__label" for="cubby">Cubby</label>
+                                <span class="mdl-textfield__error">Invalid Cubby!</span>
                             </div>
                         </form>
-                        <button class="mdl-button mdl-button--raised mdl-js-button dialog-button">Show Dialog</button>
-                        <dialog id="dialog" class="mdl-dialog">
-                                <h3 class="mdl-dialog__title">Worng Information</h3>
-                                <div class="mdl-dialog__content">
-                                        <i class="material-icons">warning</i>
-                                  <p>
-                                    This is an example of the Material Design Lite dialog component.
-                                    Please use responsibly.
-                                  </p>
-                                </div>
-                                <div class="mdl-dialog__actions">
-                                  <button type="button" class="mdl-button">Close</button>
-                                  <button type="button" class="mdl-button" disabled>Disabled action</button>
-                                </div>
-                              </dialog>
+                        <dialog id="dialog" class="mdl-dialog" style="padding:0px">
+                            <div class="cubby-warn">
+                                <i class="material-icons cubby-warn">warning</i>
+                            </div>
+                            <h3 class="mdl-dialog__title" id="warning-title"></h3>
+                            <div class="mdl-dialog__content">
+                                <p id="warning-message"></p>
+                            </div>
+                            <div class="mdl-dialog__actions">
+                                <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent dialog-button" autofocus="true">
+                                    close
+                                  </button>
+                            </div>
+                        </dialog>
                     </div>
                 </div>
 
@@ -145,8 +174,8 @@
     </div>
 
 
-    
-      
+
+
 
 
 </body>
@@ -162,7 +191,8 @@
             var ok = fakeSend(skupc.value)
             // Replace above
             if (!ok) {
-                // alertMaterial(skupc)
+                alertMaterial(skupc)
+                skupc.focus()
                 return false
             }
             document.getElementById("cubby").focus()
@@ -174,13 +204,20 @@
         if (e.keyCode == 13) {
             var skupc = document.getElementById("upc-sku")
             var cubby = document.getElementById("cubby")
+            var pat = /[Dd][0-9]{3,}/
+            if(!pat.test(cubby.value)){return}
+            if(skupc.value == ''){
+                alertMaterial(skupc)
+                cubby.focus()
+                return
+            }
             // Replace with fucntion to send to server
             // also make true/false for errors to move on
             var ok = fakeSend(cubby.value)
             console.log(cubby.value)
             // Replace above
             if (!ok) {
-                // alertMaterial(cubby)
+                alertMaterial(cubby)
                 return
             }
             skupc.value = ''
@@ -190,36 +227,43 @@
         }
     }
 
-function fakeSend(val){
-    if(val == "012345678912" || val == "D0002" ){
-        return true
+    function fakeSend(val) {
+        if (val == "012345678912" || val == "D002") {
+            return true
+        }
+        return false
     }
-    return false
-}
-function alertMaterial(){
 
-}        
-
-
-
-
-
-
-
-
-    (function() {
-    'use strict';
-    var dialogButton = document.querySelector('.dialog-button');
-    var dialog = document.querySelector('#dialog');
-    if (! dialog.showModal) {
-      dialogPolyfill.registerDialog(dialog);
+    function alertMaterial(elem) {
+        var val = elem.value
+        if (elem.id != "cubby") {
+            var title = "Wrong SKU"
+            var msg = "<b>"+val+"</b> is not a known SKU. "+"Try using UPC or re-enter the SKU."
+            var UPCreg = /[0-9]{12,13}$/
+            if(val == ''){
+                title = "Missing UPC/SKU"
+                msg ="You must provide a UPC or SKU to continue"
+            }
+            
+            if (UPCreg.test(val)) {
+                title = "Wrong UPC"
+                msg = "<b>"+val+"</b> is not a known UPC. "+"Try using SKU or re-enter the UPC."
+            }
+        } else {
+            var title = "Wrong Cubby"
+            var msg ="<b>"+val+"</b> is not the right cubby. "+"Check that you put the product into the right cubby."
+        }
+        var dialog = document.querySelector('#dialog')
+        document.getElementById("warning-title").innerHTML = title
+        document.getElementById("warning-message").innerHTML = msg
+        dialog.showModal()
     }
-    dialogButton.addEventListener('click', function() {
-       dialog.showModal();
-    });
-    dialog.querySelector('button:not([disabled])')
-    .addEventListener('click', function() {
-      dialog.close();
-    });
-  }());
+
+    (function () {
+        dialog.querySelector('button:not([disabled])')
+            .addEventListener('click', function () {
+                dialog.close();
+            });
+
+    }())
 </script>
