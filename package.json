@@ -1,0 +1,27 @@
+{
+  "name": "cubbychaser-material",
+  "version": "1.0.0",
+  "description": "client side js and html for cubbychaser app",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/WedgeNix/cubbychaser-material.git"
+  },
+  "author": "WedgeNix",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/WedgeNix/cubbychaser-material/issues"
+  },
+  "homepage": "https://github.com/WedgeNix/cubbychaser-material#readme",
+  "devDependencies": {
+    "@types/firebase": "^2.4.32"
+  },
+  "typeAcquisition": {
+    "include": [
+        "@types/firebase"
+    ]
+}
+}

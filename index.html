@@ -5,10 +5,17 @@
     <title>Cubby Chaser</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="assets/css/core.css">
+    <!-- <link rel="stylesheet" href="assets/css/core.css"> -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.teal-red.min.css">
     <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+    <!-- <script src="https://www.gstatic.com/firebasejs/ui/2.3.0/firebase-ui-auth__en.js"></script> -->
+    <script src="https://www.gstatic.com/firebasejs/4.5.0/firebase.js"></script>
+    <!-- <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/2.3.0/firebase-ui-auth.css" /> -->
+
+    <script src="https://cdn.firebase.com/libs/firebaseui/2.3.0/firebaseui.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/2.3.0/firebaseui.css" />
+    <script src="assets/js/index.js"></script>
 
 
 
@@ -95,7 +102,7 @@
         <div class="mdl-layout__drawer">
             <span class="mdl-layout-title">Account</span>
             <nav class="mdl-navigation">
-                <a class="mdl-navigation__link" href="">Link</a>
+                <a class="mdl-navigation__link" href="login.html">login</a>
                 <a class="mdl-navigation__link" href="">Link</a>
                 <a class="mdl-navigation__link" href="">Link</a>
                 <a class="mdl-navigation__link" href="">Link</a>
@@ -117,6 +124,8 @@
                                 <span class="mdl-textfield__error">Invalid Cubby!</span>
                             </div>
                         </form>
+
+                        <!-- wrong upc or cubby dialog popup -->
                         <dialog id="dialog" class="mdl-dialog" style="padding:0px">
                             <div class="cubby-warn">
                                 <i class="material-icons cubby-warn">warning</i>
@@ -126,11 +135,15 @@
                                 <p id="warning-message"></p>
                             </div>
                             <div class="mdl-dialog__actions">
-                                <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent dialog-button" autofocus="true">
+                                <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent dialog-button" autofocus="false">
                                     close
                                   </button>
                             </div>
                         </dialog>
+                        <!-- end of wrong upd or cubby dialog popup -->
+
+                       
+
                     </div>
                 </div>
 
@@ -175,95 +188,18 @@
 
 
 
+<script>  
+(function () {
+    dialog.querySelector('button:not([disabled])')
+        .addEventListener('click', function () {
+            dialog.close();
+        });
 
+}())
+</script>
 
 
 </body>
 
 </html>
 
-<script>
-    function skpcSearch(e) {
-        if (e.keyCode == 13) {
-            var skupc = document.getElementById("upc-sku")
-            // Replace with function to server
-            console.log(skupc.value)
-            var ok = fakeSend(skupc.value)
-            // Replace above
-            if (!ok) {
-                alertMaterial(skupc)
-                skupc.focus()
-                return false
-            }
-            document.getElementById("cubby").focus()
-            return false
-        }
-    }
-
-    function cubbyAssign(e) {
-        if (e.keyCode == 13) {
-            var skupc = document.getElementById("upc-sku")
-            var cubby = document.getElementById("cubby")
-            var pat = /[Dd][0-9]{3,}/
-            if(!pat.test(cubby.value)){return}
-            if(skupc.value == ''){
-                alertMaterial(skupc)
-                cubby.focus()
-                return
-            }
-            // Replace with fucntion to send to server
-            // also make true/false for errors to move on
-            var ok = fakeSend(cubby.value)
-            console.log(cubby.value)
-            // Replace above
-            if (!ok) {
-                alertMaterial(cubby)
-                return
-            }
-            skupc.value = ''
-            cubby.value = ''
-            skupc.focus()
-            return
-        }
-    }
-
-    function fakeSend(val) {
-        if (val == "012345678912" || val == "D002") {
-            return true
-        }
-        return false
-    }
-
-    function alertMaterial(elem) {
-        var val = elem.value
-        if (elem.id != "cubby") {
-            var title = "Wrong SKU"
-            var msg = "<b>"+val+"</b> is not a known SKU. "+"Try using UPC or re-enter the SKU."
-            var UPCreg = /[0-9]{12,13}$/
-            if(val == ''){
-                title = "Missing UPC/SKU"
-                msg ="You must provide a UPC or SKU to continue"
-            }
-            
-            if (UPCreg.test(val)) {
-                title = "Wrong UPC"
-                msg = "<b>"+val+"</b> is not a known UPC. "+"Try using SKU or re-enter the UPC."
-            }
-        } else {
-            var title = "Wrong Cubby"
-            var msg ="<b>"+val+"</b> is not the right cubby. "+"Check that you put the product into the right cubby."
-        }
-        var dialog = document.querySelector('#dialog')
-        document.getElementById("warning-title").innerHTML = title
-        document.getElementById("warning-message").innerHTML = msg
-        dialog.showModal()
-    }
-
-    (function () {
-        dialog.querySelector('button:not([disabled])')
-            .addEventListener('click', function () {
-                dialog.close();
-            });
-
-    }())
-</script>
