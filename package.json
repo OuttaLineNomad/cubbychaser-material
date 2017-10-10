@@ -1,5 +1,5 @@
 {
-  "name": "cubbychaser-material",
+  "name": "cubbychaser",
   "version": "1.0.0",
   "description": "client side js and html for cubbychaser app",
   "main": "index.js",
@@ -21,7 +21,11 @@
   },
   "typeAcquisition": {
     "include": [
-        "@types/firebase"
+      "@types/firebase"
     ]
-}
+  },
+  "dependencies": {
+    "firebase": "^4.5.0",
+    "firebaseui": "^2.4.0"
+  }
 }
