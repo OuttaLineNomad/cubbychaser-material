@@ -1,4 +1,4 @@
-var User, cubbyLoc;
+var User, order;
 
 // Initialize Firebase
 var config = {
@@ -14,6 +14,10 @@ firebase.initializeApp(config);
 firebase.auth().onAuthStateChanged(function (user) {
     if (user) {
         User = user;
+        document.getElementById("display-image").src = user.photoURL;
+        document.getElementById("dislplay-name").innerText = user.displayName;
+        var actual_JSON = initTestData();
+        populateCubbies(actual_JSON);
     } else {
         var win = window.location.href;
         if (!win.includes("login")) {
@@ -21,6 +25,17 @@ firebase.auth().onAuthStateChanged(function (user) {
         }
     }
 });
+
+function populateCubbies(JSONorders){
+    var i;
+    for(i in JSONorders){
+        var loc = i;
+        var tot = JSONorders[i].total;
+        var cubbyImg = document.getElementById("img-" +loc);
+        var count = "0/" + tot;
+        cubbyImg.innerHTML = '<span class="order-count">'+ count +'</span>';
+    }
+}
 
 function logout() {
     firebase.auth().signOut().then(function () {}, function (error) {
@@ -33,21 +48,28 @@ function skpcSearch(e) {
         var skupc = document.getElementById("upc-sku");
         // Replace with function to server
         console.log(skupc.value);
-        cubbyLoc = fakeSend(skupc.value, User.email);
-       var cub = document.getElementById(cubbyLoc.location);
-        cub.style.backgroundImage = "url("+cubbyLoc.url+")"
-        cub.classList.add("tada")
-
+        order = fakeSend(skupc.value, User.email);
         // Replace above
-        if (!cubbyLoc) {
+        if (!order) {
             cubbyLoc = 0;
             alertMaterial(skupc);
             skupc.focus();
             return false;
         }
+        sendToCubby();
         document.getElementById("cubby").focus();
         return false;
     }
+}
+
+function sendToCubby() {
+    var cub = document.getElementById(order.location);
+    var cubImg = document.getElementById("img-" + order.location);
+    var cubBan = document.getElementById("band-" + order.location);
+    cubImg.innerHTML = '<img src="' + order.url+'" alt="" >';
+    op = order.spot / order.total;
+    cubBan.style.background = "rgba(0,150,136,"+ op+ ")";
+    cub.classList.add("tada");
 }
 
 function cubbyAssign(e) {
@@ -58,18 +80,19 @@ function cubbyAssign(e) {
         if (!pat.test(cubby.value)) {
             return;
         }
-        if (cubbyLoc != cubby.value) {
+        if (order.location != cubby.value) {
             alertMaterial(cubby);
             return;
         }
         // Replace with fucntion to send to server
         // also make true/false for errors to move on
         var ok = fakeSend(cubby.value, User.email);
-        document.getElementById(cubbyLoc).classList.remove("tada")
+        document.getElementById(order.location).classList.remove("tada");
+        orderCount();
         console.log(cubby.value);
         // Replace above
         if (!ok) {
-            alert("An error has occrued on the server")
+            alert("An error has occrued on the server");
             return;
         }
         skupc.value = '';
@@ -79,17 +102,76 @@ function cubbyAssign(e) {
     }
 }
 
-function fakeSend(val, user) {
-    if (val == "012345678912" || val == "D002") {
-        if (val == "012345678912") {
-            console.log(user);
-            return {location:"D002",url:"https://s3.amazonaws.com/wedgenix-host/829102001131+(1)-NEW.jpg"};
-        }
-        if (val == "D002") {
-            console.log(user);
+function orderCount() {
+    var spot = order.spot;
+    var total = order.total;
+    var cubbyImg = document.getElementById("img-" + order.location);
+    if (spot == total) {
+        cubbyImg.innerHTML = '<span style="font-size: 39px;" class="order-count">DONE</span>';
+        return;
+    }
+    var count = order.spot+"/"+order.total;
+    cubbyImg.innerHTML = '<span class="order-count">'+count+'</span>';
+}
 
-            return true;
-        }
+function fakeSend(val, user) {
+    if (val.includes("D")) {
+        return true;
+    }
+    if (val == "21") {
+        console.log(user);
+        return {
+            location: "D002",
+            url: "https://s3.amazonaws.com/wedgenix-host/CW-762166276148+(1)-NEW.jpg",
+            total: "3",
+            spot: "1"
+        };
+    }
+    if (val == "22") {
+        console.log(user);
+        return {
+            location: "D002",
+            url: "https://s3.amazonaws.com/wedgenix-host/829102001131+(1)-NEW.jpg",
+            total: "3",
+            spot: "2"
+        };
+    }
+    if (val == "23") {
+        console.log(user);
+        return {
+            location: "D002",
+            url: "https://s3.amazonaws.com/wedgenix-host/CW-762166374158 (1).jpg",
+            total: "3",
+            spot: "3"
+        };
+    }
+
+    if (val == "11") {
+        console.log(user);
+        return {
+            location: "D001",
+            url: "https://s3.amazonaws.com/wedgenix-host/CW-762166276148+(1)-NEW.jpg",
+            total: "3",
+            spot: "1"
+        };
+    }
+    if (val == "12") {
+        console.log(user);
+        return {
+            location: "D001",
+            url: "https://s3.amazonaws.com/wedgenix-host/829102001131+(1)-NEW.jpg",
+            total: "3",
+            spot: "2"
+        };
+    }
+    if (val == "13") {
+        console.log(user);
+        return {
+            location: "D001",
+            url: "https://s3.amazonaws.com/wedgenix-host/CW-762166374158 (1).jpg",
+            total: "3",
+            spot: "3"
+        };
     }
     return false;
 }
@@ -99,7 +181,7 @@ function alertMaterial(elem) {
     var title, msg;
     if (elem.id != "cubby") {
         title = "Wrong SKU";
-        msg = "<b>" + val + "</b> is not a known SKU. " + "Try using UPC or re-enter the SKU.";
+        msg = "<b>"+ val +"</b> is not a known SKU. Try using UPC or re-enter the SKU.";
         var UPCreg = /[0-9]{12,13}$/;
         if (val == '') {
             title = "Missing UPC/SKU";
@@ -108,11 +190,11 @@ function alertMaterial(elem) {
 
         if (UPCreg.test(val)) {
             title = "Wrong UPC";
-            msg = "<b>" + val + "</b> is not a known UPC. " + "Try using SKU or re-enter the UPC.";
+            msg = "<b>" + val + "</b> is not a known UPC. Try using SKU or re-enter the UPC.";
         }
     } else {
         title = "Wrong Cubby";
-        msg = "<b>" + val + "</b> is not the right cubby. " + "Check that you put the product into the right cubby.";
+        msg = "<b>" + val + "</b> is not the right cubby. Check that you put the product into the right cubby.";
     }
     var dialog = document.querySelector('#dialog');
     document.getElementById("warning-title").innerHTML = title;
@@ -121,7 +203,6 @@ function alertMaterial(elem) {
 }
 
 function login() {
-    // alert("hello")
     var provider = new firebase.auth.GoogleAuthProvider();
     provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
 
@@ -156,3 +237,55 @@ function closeDialog() {
         skupc.focus();
     }
 }
+
+
+
+
+// FOR TESTING ONLY
+function initTestData() {
+   
+       return JSON.parse('{'+
+       '"D001": {'+
+           '"items": {'+
+               '"11": {'+
+                   '"url:": "https://s3.amazonaws.com/wedgenix-host/CW-762166276148+(1)-NEW.jpg",'+
+                   '"spot": "1"'+
+               '},'+
+               '"12": {'+
+                   '"url": "https://s3.amazonaws.com/wedgenix-host/829102001131+(1)-NEW.jpg",'+
+                   '"spot": "2"'+
+               '},'+
+               '"13": {'+
+                   '"url": "https://s3.amazonaws.com/wedgenix-host/CW-762166374158 (1).jpg",'+
+                   '"spot": "3"'+
+               '}'+
+           '},'+
+           '"orderNumber": "111-222-333",'+
+           '"total": "3"'+
+       '},'+
+       '"D002": {'+
+           '"items": {'+
+               '"21": {'+
+                   '"url:": "https://s3.amazonaws.com/wedgenix-host/CW-762166276148+(1)-NEW.jpg",'+
+                   '"spot": "1"'+
+               '},'+
+               '"22": {'+
+                   '"url": "https://s3.amazonaws.com/wedgenix-host/829102001131+(1)-NEW.jpg",'+
+                   '"spot": "2"'+
+               '},'+
+               '"23": {'+
+                   '"url": "https://s3.amazonaws.com/wedgenix-host/CW-762166374158 (1).jpg",'+
+                   '"spot": "3"'+
+               '}'+
+           '},'+
+           '"total": "3",'+
+           '"orderNumber": "222-333-999"'+
+       '}'+
+   '}');
+       
+
+   }
+    
+
+
+
