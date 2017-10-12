@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="assets/css/core.css">
     <link rel="stylesheet" href="assets/css/animation.css">
+
     <script src="assets/js/index.js"></script>
 </head>
 
@@ -34,9 +35,12 @@
         <div class="mdl-layout__drawer">
             <span class="mdl-layout-title">Account</span>
             <nav class="mdl-navigation">
-                <a class="mdl-navigation__link" onclick="logout()"><i class="material-icons">power_settings_new</i> logout </a>
-                <a class="mdl-navigation__link" href=""><i class="material-icons">open_in_new</i> New Session </a>
-                <a class="mdl-navigation__link" href=""><i class="material-icons">print</i> Print</a>
+                <a class="mdl-navigation__link" onclick="logout()">
+                    <i class="material-icons">power_settings_new</i> logout </a>
+                <a class="mdl-navigation__link" href="">
+                    <i class="material-icons">open_in_new</i> New Session </a>
+                <a class="mdl-navigation__link" href="">
+                    <i class="material-icons">print</i> Print</a>
             </nav>
         </div>
         <main class="mdl-layout__content">
@@ -45,7 +49,7 @@
                     <div class="mdl-card cubby-side mdl-shadow--2dp">
                         <div class="accounts">
                             <div class="sidebar-user-material-content">
-                                <a href="#" class="legitRipple">
+                                <a class="legitRipple">
                                     <img id="display-image" src="assets/images/placeholder.jpg" class="img-circle img-responsive" alt="">
                                 </a>
                                 <h6 id="dislplay-name"></h6>
@@ -88,10 +92,12 @@
 
                 <div class="mdl-cell mdl-cell--9-col">
                     <div class="content-grid mdl-grid">
-                        <div id="D001" class="mdl-card card-square mdl-shadow--2dp">
-                            <div id="img-D001" class="mdl-card__title mdl-card--expand"></div>
-                            <div id="band-D001" class="mdl-card__actions">
-                                <span class="cubby-name">D001</span>
+                        <div id="D001-rip" class="ripplelink" >
+                            <div id="D001" class="mdl-card card-square mdl-shadow--2dp">
+                                <div id="img-D001" class="mdl-card__title mdl-card--expand"></div>
+                                <div id="band-D001" class="mdl-card__actions">
+                                    <span class="cubby-name">D001</span>
+                                </div>
                             </div>
                         </div>
                         <div id="D002" class="mdl-card card-square mdl-shadow--2dp">
@@ -222,6 +228,51 @@
             </div>
         </main>
     </div>
+
+    <script src="node_modules/clipboard/dist/clipboard.min.js"></script>
+
+    <script>
+
+        document.getElementById("D001-rip").setAttribute("data-clipboard-text","Bryce-is-cool")
+
+
+        var links = document.querySelectorAll('.ripplelink');
+
+        for (var i = 0, len = links.length; i < len; i++) {
+            links[i].addEventListener('click', function (e) {
+                var targetEl = e.target;
+                var inkEl = targetEl.querySelector('.ink');
+
+                if (inkEl) {
+                    inkEl.classList.remove('animate');
+                } else {
+                    inkEl = document.createElement('span');
+                    inkEl.classList.add('ink');
+                    inkEl.style.width = inkEl.style.height = Math.max(targetEl.offsetWidth, targetEl.offsetHeight) +
+                        'px';
+                    targetEl.appendChild(inkEl);
+                }
+
+                inkEl.style.left = (e.offsetX - inkEl.offsetWidth / 2) + 'px';
+                inkEl.style.top = (e.offsetY - inkEl.offsetHeight / 2) + 'px';
+                inkEl.classList.add('animate');
+            }, false);
+        }
+
+            var clipboard = new Clipboard(links)
+
+            clipboard.on('success', function (e) {
+                console.log(e);
+            });
+            clipboard.on('error', function (e) {
+                console.log(e);
+            });
+        
+    </script>
+
+
+
+
 </body>
 
 </html>
