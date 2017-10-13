@@ -11,7 +11,7 @@ var config = {
 };
 firebase.initializeApp(config);
 
-firebase.auth().onAuthStateChanged(function (user) {
+firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
         User = user;
         document.getElementById("display-image").src = user.photoURL;
@@ -26,19 +26,20 @@ firebase.auth().onAuthStateChanged(function (user) {
     }
 });
 
-function populateCubbies(JSONorders){
+function populateCubbies(JSONorders) {
     var i;
-    for(i in JSONorders){
+    for (i in JSONorders) {
         var loc = i;
         var tot = JSONorders[i].total;
-        var cubbyImg = document.getElementById("img-" +loc);
+        var cubbyImg = document.getElementById("img-" + loc);
         var count = "0/" + tot;
-        cubbyImg.innerHTML = '<span class="order-count">'+ count +'</span>';
+        cubbyImg.innerHTML = '<span class="order-count">' + count + '</span>';
+        document.getElementById("rip-" + loc).setAttribute("data-clipboard-text", JSONorders[i].orderNumber)
     }
 }
 
 function logout() {
-    firebase.auth().signOut().then(function () {}, function (error) {
+    firebase.auth().signOut().then(function() {}, function(error) {
         alert("You did not log out for some reason.");
     });
 }
@@ -66,9 +67,9 @@ function sendToCubby() {
     var cub = document.getElementById(order.location);
     var cubImg = document.getElementById("img-" + order.location);
     var cubBan = document.getElementById("band-" + order.location);
-    cubImg.innerHTML = '<img src="' + order.url+'" alt="" >';
+    cubImg.innerHTML = '<img src="' + order.url + '" alt="" >';
     op = order.spot / order.total;
-    cubBan.style.background = "rgba(0,150,136,"+ op+ ")";
+    cubBan.style.background = "rgba(0,150,136," + op + ")";
     cub.classList.add("tada");
 }
 
@@ -110,8 +111,8 @@ function orderCount() {
         cubbyImg.innerHTML = '<span style="font-size: 39px;" class="order-count">DONE</span>';
         return;
     }
-    var count = order.spot+"/"+order.total;
-    cubbyImg.innerHTML = '<span class="order-count">'+count+'</span>';
+    var count = order.spot + "/" + order.total;
+    cubbyImg.innerHTML = '<span class="order-count">' + count + '</span>';
 }
 
 function fakeSend(val, user) {
@@ -181,7 +182,7 @@ function alertMaterial(elem) {
     var title, msg;
     if (elem.id != "cubby") {
         title = "Wrong SKU";
-        msg = "<b>"+ val +"</b> is not a known SKU. Try using UPC or re-enter the SKU.";
+        msg = "<b>" + val + "</b> is not a known SKU. Try using UPC or re-enter the SKU.";
         var UPCreg = /[0-9]{12,13}$/;
         if (val == '') {
             title = "Missing UPC/SKU";
@@ -206,14 +207,14 @@ function login() {
     var provider = new firebase.auth.GoogleAuthProvider();
     provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
 
-    firebase.auth().signInWithPopup(provider).then(function (result) {
+    firebase.auth().signInWithPopup(provider).then(function(result) {
         // This gives you a Google Access Token. You can use it to access the Google API.
         var token = result.credential.accessToken;
         // The signed-in user info.
         var user = result.user;
         // ...
         console.log(user);
-    }).catch(function (error) {
+    }).catch(function(error) {
         // Handle Errors here.
         var errorCode = error.code;
         var errorMessage = error.message;
@@ -243,49 +244,45 @@ function closeDialog() {
 
 // FOR TESTING ONLY
 function initTestData() {
-   
-       return JSON.parse('{'+
-       '"D001": {'+
-           '"items": {'+
-               '"11": {'+
-                   '"url:": "https://s3.amazonaws.com/wedgenix-host/CW-762166276148+(1)-NEW.jpg",'+
-                   '"spot": "1"'+
-               '},'+
-               '"12": {'+
-                   '"url": "https://s3.amazonaws.com/wedgenix-host/829102001131+(1)-NEW.jpg",'+
-                   '"spot": "2"'+
-               '},'+
-               '"13": {'+
-                   '"url": "https://s3.amazonaws.com/wedgenix-host/CW-762166374158 (1).jpg",'+
-                   '"spot": "3"'+
-               '}'+
-           '},'+
-           '"orderNumber": "111-222-333",'+
-           '"total": "3"'+
-       '},'+
-       '"D002": {'+
-           '"items": {'+
-               '"21": {'+
-                   '"url:": "https://s3.amazonaws.com/wedgenix-host/CW-762166276148+(1)-NEW.jpg",'+
-                   '"spot": "1"'+
-               '},'+
-               '"22": {'+
-                   '"url": "https://s3.amazonaws.com/wedgenix-host/829102001131+(1)-NEW.jpg",'+
-                   '"spot": "2"'+
-               '},'+
-               '"23": {'+
-                   '"url": "https://s3.amazonaws.com/wedgenix-host/CW-762166374158 (1).jpg",'+
-                   '"spot": "3"'+
-               '}'+
-           '},'+
-           '"total": "3",'+
-           '"orderNumber": "222-333-999"'+
-       '}'+
-   '}');
-       
 
-   }
-    
+    return JSON.parse('{' +
+        '"D001": {' +
+        '"items": {' +
+        '"11": {' +
+        '"url:": "https://s3.amazonaws.com/wedgenix-host/CW-762166276148+(1)-NEW.jpg",' +
+        '"spot": "1"' +
+        '},' +
+        '"12": {' +
+        '"url": "https://s3.amazonaws.com/wedgenix-host/829102001131+(1)-NEW.jpg",' +
+        '"spot": "2"' +
+        '},' +
+        '"13": {' +
+        '"url": "https://s3.amazonaws.com/wedgenix-host/CW-762166374158 (1).jpg",' +
+        '"spot": "3"' +
+        '}' +
+        '},' +
+        '"orderNumber": "111-222-333",' +
+        '"total": "3"' +
+        '},' +
+        '"D002": {' +
+        '"items": {' +
+        '"21": {' +
+        '"url:": "https://s3.amazonaws.com/wedgenix-host/CW-762166276148+(1)-NEW.jpg",' +
+        '"spot": "1"' +
+        '},' +
+        '"22": {' +
+        '"url": "https://s3.amazonaws.com/wedgenix-host/829102001131+(1)-NEW.jpg",' +
+        '"spot": "2"' +
+        '},' +
+        '"23": {' +
+        '"url": "https://s3.amazonaws.com/wedgenix-host/CW-762166374158 (1).jpg",' +
+        '"spot": "3"' +
+        '}' +
+        '},' +
+        '"total": "3",' +
+        '"orderNumber": "222-333-999"' +
+        '}' +
+        '}');
 
 
-
+}
