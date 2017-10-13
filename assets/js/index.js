@@ -1,4 +1,4 @@
-var User, order;
+var User, order,JSONorders;
 
 // Initialize Firebase
 var config = {
@@ -11,13 +11,13 @@ var config = {
 };
 firebase.initializeApp(config);
 
-firebase.auth().onAuthStateChanged(function(user) {
+firebase.auth().onAuthStateChanged(function (user) {
     if (user) {
         User = user;
         document.getElementById("display-image").src = user.photoURL;
         document.getElementById("dislplay-name").innerText = user.displayName;
-        var actual_JSON = initTestData();
-        populateCubbies(actual_JSON);
+        actual_JSON = initTestData();
+        populateSess(actual_JSON);
     } else {
         var win = window.location.href;
         if (!win.includes("login")) {
@@ -26,20 +26,94 @@ firebase.auth().onAuthStateChanged(function(user) {
     }
 });
 
-function populateCubbies(JSONorders) {
+function populateSess(data) {
+    var allHTML = '';
+    JSONorders = data;
+    for(var i in data){
+        var sessID = "Sesstion "+ i;
+        var sessCount = data[i].count;
+        var sessHTML = '<div class="mdl-card card-square mdl-shadow--2dp sesstion-card">' +
+            '<div class="ripplelink rip-session" onclick="populateCubbies('+i+')">' +
+            '<h5><span class="session-icon">' + sessCount + '</span>' + sessID + '</h5>' +
+            '</div>' + '</div> ';
+        allHTML += sessHTML;
+    }
+    document.getElementById("sesstion-data").innerHTML = allHTML;
+    rippleCopy();
+} 
+
+
+function rippleCopy(){
+    var links = document.querySelectorAll('.ripplelink');
+    for (var i = 0, len = links.length; i < len; i++) {
+        links[i].addEventListener('click', function(e) {
+            var targetEl = e.target;
+            var inkEl = targetEl.querySelector('.ink');
+
+            if (inkEl) {
+                inkEl.classList.remove('animate');
+            } else {
+                inkEl = document.createElement('span');
+                inkEl.classList.add('ink');
+                inkEl.style.width = inkEl.style.height = Math.max(targetEl.offsetWidth, targetEl.offsetHeight) +
+                    'px';
+                targetEl.appendChild(inkEl);
+            }
+
+            inkEl.style.left = (e.offsetX - inkEl.offsetWidth / 2) + 'px';
+            inkEl.style.top = (e.offsetY - inkEl.offsetHeight / 2) + 'px';
+            inkEl.classList.add('animate');
+        }, false);
+    }
+
+    var clipboard = new Clipboard(links);
+
+    clipboard.on('success', function(e) {
+        console.log(e);
+    });
+    clipboard.on('error', function(e) {
+        console.log(e);
+    });
+}
+
+
+
+
+function showSesses(){
+    document.querySelector("#sesstion-dialog").showModal();
+}
+
+
+
+function populateCubbies(id) {
     var i;
-    for (i in JSONorders) {
+    clearCubbies();
+    for (i in JSONorders[id]) {
+        if(i == "count"){continue;}
         var loc = i;
-        var tot = JSONorders[i].total;
+        var tot = JSONorders[id][i].total;
         var cubbyImg = document.getElementById("img-" + loc);
         var count = "0/" + tot;
         cubbyImg.innerHTML = '<span class="order-count">' + count + '</span>';
-        document.getElementById("rip-" + loc).setAttribute("data-clipboard-text", JSONorders[i].orderNumber)
+        document.getElementById("rip-" + loc).setAttribute("data-clipboard-text", JSONorders[id][i].orderNumber);
     }
+    closeSess();
+}
+
+function clearCubbies(){
+    var clear = document.getElementsByClassName("clear-class");
+    var noCopy = document.getElementsByClassName("ripplelink");
+
+    [].slice.call(clear).forEach(function(clear){
+        clear.innerHTML = "";
+    });
+    [].slice.call(noCopy).forEach(function(noCopy){
+        noCopy.removeAttribute("data-clipboard-text");
+    });
 }
 
 function logout() {
-    firebase.auth().signOut().then(function() {}, function(error) {
+    firebase.auth().signOut().then(function () {}, function (error) {
         alert("You did not log out for some reason.");
     });
 }
@@ -203,18 +277,20 @@ function alertMaterial(elem) {
     dialog.showModal();
 }
 
+
+
 function login() {
     var provider = new firebase.auth.GoogleAuthProvider();
     provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
 
-    firebase.auth().signInWithPopup(provider).then(function(result) {
+    firebase.auth().signInWithPopup(provider).then(function (result) {
         // This gives you a Google Access Token. You can use it to access the Google API.
         var token = result.credential.accessToken;
         // The signed-in user info.
         var user = result.user;
         // ...
         console.log(user);
-    }).catch(function(error) {
+    }).catch(function (error) {
         // Handle Errors here.
         var errorCode = error.code;
         var errorMessage = error.message;
@@ -238,6 +314,9 @@ function closeDialog() {
         skupc.focus();
     }
 }
+function closeSess() {
+    document.querySelector("#sesstion-dialog").close();
+}
 
 
 
@@ -246,6 +325,7 @@ function closeDialog() {
 function initTestData() {
 
     return JSON.parse('{' +
+        '"22":{' +
         '"D001": {' +
         '"items": {' +
         '"11": {' +
@@ -281,6 +361,65 @@ function initTestData() {
         '},' +
         '"total": "3",' +
         '"orderNumber": "222-333-999"' +
+        '},' +
+        '"count":"6"'+
+        '},' +
+        '"33":{' +
+        '"D001": {' +
+        '"items": {' +
+        '"11": {' +
+        '"url:": "https://s3.amazonaws.com/wedgenix-host/CW-762166276148+(1)-NEW.jpg",' +
+        '"spot": "1"' +
+        '},' +
+        '"12": {' +
+        '"url": "https://s3.amazonaws.com/wedgenix-host/829102001131+(1)-NEW.jpg",' +
+        '"spot": "2"' +
+        '},' +
+        '"13": {' +
+        '"url": "https://s3.amazonaws.com/wedgenix-host/CW-762166374158 (1).jpg",' +
+        '"spot": "3"' +
+        '}' +
+        '},' +
+        '"orderNumber": "555-555-555",' +
+        '"total": "3"' +
+        '},' +
+        '"D002": {' +
+        '"items": {' +
+        '"21": {' +
+        '"url:": "https://s3.amazonaws.com/wedgenix-host/CW-762166276148+(1)-NEW.jpg",' +
+        '"spot": "1"' +
+        '},' +
+        '"22": {' +
+        '"url": "https://s3.amazonaws.com/wedgenix-host/829102001131+(1)-NEW.jpg",' +
+        '"spot": "2"' +
+        '},' +
+        '"23": {' +
+        '"url": "https://s3.amazonaws.com/wedgenix-host/CW-762166374158 (1).jpg",' +
+        '"spot": "3"' +
+        '}' +
+        '},' +
+        '"total": "3",' +
+        '"orderNumber": "888-668-999"' +
+        '},' +
+        '"D003": {' +
+        '"items": {' +
+        '"31": {' +
+        '"url:": "https://s3.amazonaws.com/wedgenix-host/CW-762166276148+(1)-NEW.jpg",' +
+        '"spot": "1"' +
+        '},' +
+        '"32": {' +
+        '"url": "https://s3.amazonaws.com/wedgenix-host/829102001131+(1)-NEW.jpg",' +
+        '"spot": "2"' +
+        '},' +
+        '"33": {' +
+        '"url": "https://s3.amazonaws.com/wedgenix-host/CW-762166374158 (1).jpg",' +
+        '"spot": "3"' +
+        '}' +
+        '},' +
+        '"total": "3",' +
+        '"orderNumber": "999-999-999"' +
+        '},' +
+        '"count":"9"'+
         '}' +
         '}');
 

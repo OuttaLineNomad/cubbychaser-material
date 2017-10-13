@@ -3,7 +3,7 @@
     --second-color: rgb(255, 82, 82);
 }
 
-.card-square.mdl-card {
+.cubby-mdl-card {
     width: 155px;
     min-height: 155px;
     float: left;
@@ -160,3 +160,85 @@ layout__drawer>.mdl-layout-title {
     padding-left: 20px;
 }
 
+.sesstion-list {
+    width: 30%;
+    top: 30%;
+    position: absolute;
+    background-color: #eeeded;;
+}
+
+.sesstion-grid {
+    padding: 5px;
+    max-height: 250px;
+    overflow: scroll;
+    overflow-y: auto;
+}
+
+.sesstion-card {
+    width: 100%;
+    min-height: 100%;
+    float: left;
+    margin: 2px;
+    padding: 2px;
+}
+
+.rip-session {
+    width: 100%;
+    padding-bottom: 1px;
+}
+
+
+.session-icon {
+    float: left;
+    background: var(--second-color);
+    border-radius: 50%;
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 20px;
+    margin-right: 10px;
+    text-align: center;
+    width: 41px;
+}
+.sesstion-title{
+    background-color: var(--main-color);
+    text-align: center;
+    color: white;
+}
+
+h5 {
+    line-height: 41px;
+    margin: 10px;
+    float: left;
+    text-align: left;
+}
+
+
+::-webkit-scrollbar {
+width: 15px;
+}
+
+
+::-webkit-scrollbar-thumb {
+background-color: rgba(0, 0, 0, 0.2); 
+} /* this will style the thumb, ignoring the track */
+
+
+::-webkit-scrollbar-corner {
+visibility: hidden;
+}
+
+li {
+    font-size : 2em;
+    margin: 1em 0;
+}
+
+li > *{
+  display: inline-block;
+  vertical-align: middle;
+  }
+
+  .sess-close{
+    margin: 10px;
+    float: right;
+    width: 200px;
+  }
