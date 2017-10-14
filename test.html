@@ -32,7 +32,19 @@
                 <span class="mdl-layout-title">Cubby Chaser</span>
                 <!-- Add spacer, to align navigation to the right -->
                 <div class="mdl-layout-spacer"></div>
-                <span class="mdl-layout-title">Sesstion 1</span>
+                <button id="demo-menu-lower-right"
+                class="mdl-button mdl-js-button mdl-button" style="float:right">
+          <!-- <i class="material-icons">more_vert</i> -->
+          <span><img src="/assets/images/arrow_drop_down_white_18x18.png" alt=""> THIS</span>
+        </button></h6>
+
+    
+    <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
+        for="demo-menu-lower-right">
+      <li class="mdl-menu__item" onclick="logout()"><i class="material-icons">power_settings_new</i> logout</li>
+      <li class="mdl-menu__item" onclick="showSesses()"><i class="material-icons">open_in_new</i> New Session </li>
+      <li disabled class="mdl-menu__item">Custom Sesstion</li>
+    </ul>
             </div>
         </header>
 
@@ -45,8 +57,7 @@
     </div>
 </body>
 <script>
-    var dialog = document.querySelector('#dialog');
-    dialog.showModal();
+
 
     var links = document.querySelectorAll('.ripplelink');
     for (var i = 0, len = links.length; i < len; i++) {

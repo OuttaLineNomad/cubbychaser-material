@@ -26,14 +26,24 @@
                 <!-- Title -->
                 <span class="mdl-layout-title">Cubby Chaser</span>
                 <!-- Add spacer, to align navigation to the right -->
-                <div class="mdl-layout-spacer"></div>
                 <!-- Navigation. We hide it in small screens. -->
+                <button id="sess-drop-down" class="mdl-button mdl-js-button mdl-button" style="float:right; margin-right:25px">
+                    <!-- <i class="material-icons">more_vert</i> -->
+                    <span id="sess-drop"class="dropdown-sess"><i class="material-icons">keyboard_arrow_down</i> Sesstions </span>
+                </button>
+                <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="sess-drop-down">
+                    <li class="mdl-menu__item" onclick="showSesses()">
+                        <i class="material-icons">open_in_new</i> New Session </li>
+                        <li disabled class="mdl-menu__item" id="end-sess"  onclick="clearCubbies()">
+                            <i class="material-icons">clear</i> End Sesstion</li>
+                    <li disabled class="mdl-menu__item">Custom Sesstion</li>
+                </ul>
                 <nav class="mdl-navigation mdl-layout--large-screen-only">
                 </nav>
             </div>
-   
+
         </header>
-        
+
         <main class="mdl-layout__content">
             <div class="page-content">
                 <div class="mdl-cell mdl-cell--2-col">
@@ -43,18 +53,20 @@
                                 <a class="legitRipple">
                                     <img id="display-image" src="assets/images/placeholder.jpg" class="img-circle img-responsive" alt="">
                                 </a>
-                                <h6><span id="dislplay-name"></span><button id="demo-menu-lower-right"
+                                <h6><span id="dislplay-name"></span><button id="user-drop-down"
                                     class="mdl-button mdl-js-button mdl-button--icon" style="float:right">
                               <i class="material-icons">more_vert</i>
                             </button></h6>
                    
                         
                         <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
-                            for="demo-menu-lower-right">
+                            for="user-drop-down">
                           <li class="mdl-menu__item" onclick="logout()"><i class="material-icons">power_settings_new</i> logout</li>
-                          <li class="mdl-menu__item" onclick="showSesses()"><i class="material-icons">open_in_new</i> New Session </li>
-                          <li disabled class="mdl-menu__item">Custom Sesstion</li>
+
                         </ul>
+
+
+
                             </div>
                         </div>
                         <div class="cubby-form">
@@ -88,16 +100,16 @@
                             </div>
                         </dialog>
                         <!-- end of wrong upc or cubby dialog popup -->
-  <!-- sesstion dialog -->
-  <dialog id="sesstion-dialog" class="mdl-dialog sesstion-list" style="padding:0px;">
-        <h3 class="mdl-dialog__title sesstion-title">Active Sessions</h3>
-        <div id="sesstion-data" class="content-grid mdl-grid sesstion-grid">
-        </div>
-        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent sess-close " onclick="closeSess()">
-                close
-            </button>
-    </dialog>
-    <!-- end of sesstion dialog -->
+                        <!-- sesstion dialog -->
+                        <dialog id="sesstion-dialog" class="mdl-dialog sesstion-list" style="padding:0px;">
+                            <h3 class="mdl-dialog__title sesstion-title">Active Sessions</h3>
+                            <div id="sesstion-data" class="content-grid mdl-grid sesstion-grid">
+                            </div>
+                            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent sess-close " onclick="closeSess()">
+                                close
+                            </button>
+                        </dialog>
+                        <!-- end of sesstion dialog -->
 
                     </div>
                 </div>
@@ -283,7 +295,6 @@
     <script src="node_modules/clipboard/dist/clipboard.min.js"></script>
 
     <script>
-        
     </script>
 
 

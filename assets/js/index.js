@@ -97,6 +97,8 @@ function populateCubbies(id) {
         cubbyImg.innerHTML = '<span class="order-count">' + count + '</span>';
         document.getElementById("rip-" + loc).setAttribute("data-clipboard-text", JSONorders[id][i].orderNumber);
     }
+    document.getElementById("sess-drop").innerHTML = '<i class="material-icons">keyboard_arrow_down</i> Sesstion '+id;
+    document.getElementById("end-sess").removeAttribute("disabled")
     closeSess();
 }
 
@@ -110,6 +112,7 @@ function clearCubbies(){
     [].slice.call(noCopy).forEach(function(noCopy){
         noCopy.removeAttribute("data-clipboard-text");
     });
+    document.getElementById("sess-drop").innerHTML = '<i class="material-icons">keyboard_arrow_down</i> Sesstions ';
 }
 
 function logout() {

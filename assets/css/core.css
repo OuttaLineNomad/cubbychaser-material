@@ -242,3 +242,15 @@ li > *{
     float: right;
     width: 200px;
   }
+
+
+  .dropdown-sess{
+    font-family: "Roboto","Helvetica","Arial",sans-serif;
+font-size: 20px;
+line-height: 1;
+letter-spacing: .02em;
+font-weight: 400;
+color:white;
+margin-left: 55px;
+text-transform: capitalize;
+}
