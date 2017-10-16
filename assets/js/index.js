@@ -98,19 +98,24 @@ function populateCubbies(id) {
         document.getElementById("rip-" + loc).setAttribute("data-clipboard-text", JSONorders[id][i].orderNumber);
     }
     document.getElementById("sess-drop").innerHTML = '<i class="material-icons">keyboard_arrow_down</i> Sesstion '+id;
-    document.getElementById("end-sess").removeAttribute("disabled")
+    document.getElementById("end-sess").removeAttribute("disabled");
     closeSess();
 }
 
 function clearCubbies(){
     var clear = document.getElementsByClassName("clear-class");
     var noCopy = document.getElementsByClassName("ripplelink");
+    var band = document.getElementsByClassName("mdl-card__actions");
+    var endSesstion = document.getElementById("end-sess").setAttribute("disabled","");
 
     [].slice.call(clear).forEach(function(clear){
         clear.innerHTML = "";
     });
     [].slice.call(noCopy).forEach(function(noCopy){
         noCopy.removeAttribute("data-clipboard-text");
+    });
+    [].slice.call(band).forEach(function(noCopy){
+        noCopy.removeAttribute("style");
     });
     document.getElementById("sess-drop").innerHTML = '<i class="material-icons">keyboard_arrow_down</i> Sesstions ';
 }
