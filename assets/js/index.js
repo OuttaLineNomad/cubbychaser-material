@@ -30,15 +30,15 @@ function populateSess(data) {
     var allHTML = '';
     JSONorders = data;
     for(var i in data){
-        var sessID = "Sesstion "+ i;
+        var sessID = "session "+ i;
         var sessCount = data[i].count;
-        var sessHTML = '<div class="mdl-card card-square mdl-shadow--2dp sesstion-card">' +
+        var sessHTML = '<div class="mdl-card card-square mdl-shadow--2dp session-card">' +
             '<div class="ripplelink rip-session" onclick="populateCubbies('+i+')">' +
             '<h5><span class="session-icon">' + sessCount + '</span>' + sessID + '</h5>' +
             '</div>' + '</div> ';
         allHTML += sessHTML;
     }
-    document.getElementById("sesstion-data").innerHTML = allHTML;
+    document.getElementById("session-data").innerHTML = allHTML;
     rippleCopy();
 } 
 
@@ -80,7 +80,7 @@ function rippleCopy(){
 
 
 function showSesses(){
-    document.querySelector("#sesstion-dialog").showModal();
+    document.querySelector("#session-dialog").showModal();
 }
 
 
@@ -97,7 +97,7 @@ function populateCubbies(id) {
         cubbyImg.innerHTML = '<span class="order-count">' + count + '</span>';
         document.getElementById("rip-" + loc).setAttribute("data-clipboard-text", JSONorders[id][i].orderNumber);
     }
-    document.getElementById("sess-drop").innerHTML = '<i class="material-icons">keyboard_arrow_down</i> Sesstion '+id;
+    document.getElementById("sess-drop").innerHTML = '<i class="material-icons">keyboard_arrow_down</i> session '+id;
     document.getElementById("end-sess").removeAttribute("disabled");
     closeSess();
 }
@@ -106,7 +106,7 @@ function clearCubbies(){
     var clear = document.getElementsByClassName("clear-class");
     var noCopy = document.getElementsByClassName("ripplelink");
     var band = document.getElementsByClassName("mdl-card__actions");
-    var endSesstion = document.getElementById("end-sess").setAttribute("disabled","");
+    var endsession = document.getElementById("end-sess").setAttribute("disabled","");
 
     [].slice.call(clear).forEach(function(clear){
         clear.innerHTML = "";
@@ -117,7 +117,7 @@ function clearCubbies(){
     [].slice.call(band).forEach(function(noCopy){
         noCopy.removeAttribute("style");
     });
-    document.getElementById("sess-drop").innerHTML = '<i class="material-icons">keyboard_arrow_down</i> Sesstions ';
+    document.getElementById("sess-drop").innerHTML = '<i class="material-icons">keyboard_arrow_down</i> sessions ';
 }
 
 function logout() {
@@ -323,7 +323,7 @@ function closeDialog() {
     }
 }
 function closeSess() {
-    document.querySelector("#sesstion-dialog").close();
+    document.querySelector("#session-dialog").close();
 }
 
 

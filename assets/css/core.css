@@ -160,21 +160,21 @@ layout__drawer>.mdl-layout-title {
     padding-left: 20px;
 }
 
-.sesstion-list {
+.session-list {
     width: 30%;
     top: 30%;
     position: absolute;
     background-color: #eeeded;;
 }
 
-.sesstion-grid {
+.session-grid {
     padding: 5px;
     max-height: 250px;
     overflow: scroll;
     overflow-y: auto;
 }
 
-.sesstion-card {
+.session-card {
     width: 100%;
     min-height: 100%;
     float: left;
@@ -199,7 +199,7 @@ layout__drawer>.mdl-layout-title {
     text-align: center;
     width: 41px;
 }
-.sesstion-title{
+.session-title{
     background-color: var(--main-color);
     text-align: center;
     color: white;
